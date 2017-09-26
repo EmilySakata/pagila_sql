@@ -24,6 +24,9 @@ SELECT first_name, last_name
 FROM actor;
 
 
+![strava%20vs%20race.png](https://github.com/EmilySakata/Strava_project/blob/master/images/strava%20vs%20race.png)
+
+
 1b. Display the first and last name of each actor in a single column in upper case letters. Name the column Actor Name
 
 SELECT UPPER (CONCAT(first_name, last_name ) )AS actor_name
