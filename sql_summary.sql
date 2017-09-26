@@ -171,3 +171,37 @@ FROM city_canada c
 INNER JOIN cust_address ca
 ON ca.city_id = c.city_id;
 
+/* 7d. Sales have been lagging among young families, and you wish to target all family movies for a promotion. Identify all movies categorized as a family film.
+Now we mentioned family film, but there is no family film category. There’s a category that resembles that. In the real world nothing will be exact.*/
+
+WITH film_fam AS 
+	( SELECT fc.film_id, c.name
+	FROM film_category fc
+	LEFT JOIN category c
+	ON fc.category_id= c.category_id 
+	WHERE UPPER(c.name)= 'FAMILY')
+
+
+SELECT f.title, fc.name AS category
+FROM film_fam fc
+INNER JOIN film f
+ON fc.film_id = f.film_id;
+
+
+/* 7e. Display the most frequently rented movies in descending order.*/
+
+WITH rented AS 
+	( SELECT r.rental_id, r.inventory_id, i.film_id
+	FROM rental r
+	LEFT JOIN inventory i
+	ON r.inventory_id= i.inventory_id 
+	)
+
+
+SELECT f.title, COUNT(r.rental_id) AS number_rent
+FROM rented r
+INNER JOIN film f
+ON r.film_id = f.film_id
+GROUP BY f.title
+ORDER BY COUNT(r.rental_id) DESC;
+
