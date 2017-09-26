@@ -312,6 +312,22 @@ ON ca.city_id = c.city_id;
 
 7d. Sales have been lagging among young families, and you wish to target all family movies for a promotion. Identify all movies categorized as a family film.
 Now we mentioned family film, but there is no family film category. There’s a category that resembles that. In the real world nothing will be exact.
+
+WITH film_fam AS 
+	( SELECT fc.film_id, c.name
+	FROM film_category fc
+	LEFT JOIN category c
+	ON fc.category_id= c.category_id 
+	WHERE UPPER(c.name)= 'FAMILY')
+
+
+SELECT f.title, fc.name AS category
+FROM film_fam fc
+INNER JOIN film f
+ON fc.film_id = f.film_id;
+
+![screenshot_7d](https://github.com/EmilySakata/pagila_sql/blob/master/Screenshot_answer/7d.png)
+
 7e. Display the most frequently rented movies in descending order.
 7f. Write a query to display how much business, in dollars, each store brought in.
 7g. Write a query to display for each store its store ID, city, and country.
