@@ -239,6 +239,7 @@ GROUP BY f.film_id
 ORDER BY f.film_id ASC;
 
 ![screenshot_6c](https://github.com/EmilySakata/pagila_sql/blob/master/Screenshot_answer/6c.png)
+
 6d. How many copies of the film Hunchback Impossible exist in the inventory system?
 
 SELECT f.film_id, f.title, COUNT(i.film_id)
@@ -252,9 +253,62 @@ GROUP BY f.film_id;
 
 6e. Using the tables payment and customer and the JOIN command, list the total paid by each customer. List the customers alphabetically by last name:
 
+
+SELECT c.customer_id , c.last_name, SUM(p.amount)
+FROM customer c
+LEFT JOIN payment p
+ON c.customer_id = p.customer_id 
+GROUP BY c.customer_id 
+ORDER BY c.last_name ASC;
+
+![screenshot_6e](https://github.com/EmilySakata/pagila_sql/blob/master/Screenshot_answer/6e.png)
+
 7a. The music of Queen and Kris Kristofferson have seen an unlikely resurgence. As an unintended consequence, films starting with the letters K and Q have also soared in popularity. display the titles of movies starting with the letters K and Q whose language is English.
+
+SELECT f.title, f.language_id, l.name
+		FROM film f
+		LEFT JOIN language l
+		ON f.language_id = l.language_id  
+		WHERE UPPER (f.title) LIKE 'K%'OR  UPPER (f.title) LIKE 'Q%';
+
+![screenshot_7a](https://github.com/EmilySakata/pagila_sql/blob/master/Screenshot_answer/7a.png)
+
 7b. Use subqueries to display all actors who appear in the film Alone Trip.
+
+SELECT alone_trip.title, a.first_name, a.last_name
+FROM ( SELECT f.film_id, f.title,fa.actor_id
+		FROM film f
+		LEFT JOIN film_actor fa
+		ON f.film_id = fa.film_id
+		WHERE UPPER(f.title)= 'ALONE TRIP' ) AS alone_trip 
+LEFT JOIN actor a
+ON alone_trip.actor_id = a.actor_id
+ORDER BY a.first_name;
+
+![screenshot_7b](https://github.com/EmilySakata/pagila_sql/blob/master/Screenshot_answer/7b.png)
+
 7c. You want to run an email marketing campaign in Canada, for which you will need the names and email addresses of all Canadian customers. Use joins to retrieve this information.
+
+WITH cust_address AS 
+	( SELECT c.customer_id, c.first_name, c.last_name, c.email, a.address_id, a.city_id
+	FROM customer c
+	LEFT JOIN address a
+	ON c.address_id= a.address_id ),
+	city_canada AS (
+    SELECT c.city_id, co.country, co.country_id
+	FROM city c
+	LEFT JOIN country co
+	ON c.country_id = co.country_id
+	WHERE UPPER(co.country) = 'CANADA')
+
+
+SELECT ca.first_name, ca.last_name, ca.email, c.country
+FROM city_canada c
+INNER JOIN cust_address ca
+ON ca.city_id = c.city_id;
+
+![screenshot_7c](https://github.com/EmilySakata/pagila_sql/blob/master/Screenshot_answer/7c.png)
+
 7d. Sales have been lagging among young families, and you wish to target all family movies for a promotion. Identify all movies categorized as a family film.
 Now we mentioned family film, but there is no family film category. There’s a category that resembles that. In the real world nothing will be exact.
 7e. Display the most frequently rented movies in descending order.
@@ -264,3 +318,4 @@ Now we mentioned family film, but there is no family film category. There’s a 
 8a. In your new role as an executive, you would like to have an easy way of viewing the Top five genres by gross revenue. Use the solution from the problem above to create a view. 
 8b. How would you display the view that you created in 8a?
 8c. You find that you no longer need the view top_five_genres. Write a query to delete it.
+
