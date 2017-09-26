@@ -14,7 +14,7 @@ Steps to create pabila database:
 
 
 Homework questions and answers: 
-README file contains all answers and screenshots of the querries used for this homework. Additionally, the SQL summary can be found here:
+README file contains all answers and screenshots of the querries used for this homework. Additionally, the SQL summary can be found here: https://github.com/EmilySakata/pagila_sql/blob/master/sql_summary.sql
 
 
 Below section describes the questions and SQL querries used for the answer.
@@ -40,13 +40,14 @@ FROM actor;
 SELECT actor_id , first_name, last_name
 FROM actor
 WHERE first_name = 'JOE';
-
+![screenshot_2a](https://github.com/EmilySakata/pagila_sql/blob/master/Screenshot_answer/2a.png)
 2b. Find all actors whose last name contain the letters GEN. Make this case insensitive
 
 SELECT actor_id , first_name, last_name
 FROM actor
 WHERE UPPER (last_name) similar to '%GEN%';
 
+![screenshot_2b](https://github.com/EmilySakata/pagila_sql/blob/master/Screenshot_answer/2b.png)
 
 2c. Find all actors whose last names contain the letters LI. This time, order the rows by last name and first name, in that order. Make this case insensitive.
 
@@ -55,6 +56,7 @@ SELECT actor_id , first_name, last_name
 FROM actor
 WHERE UPPER (last_name) similar to '%LI%'
 ORDER BY last_name ASC, first_name ASC;
+![screenshot_2c](https://github.com/EmilySakata/pagila_sql/blob/master/Screenshot_answer/2c.png)
 
 2d. Using IN, display the country_id and country columns of the following countries: Afghanistan, Bangladesh, and China.
 
@@ -62,19 +64,24 @@ SELECT country_id, country
 FROM country
 WHERE country IN  ('Afghanistan', 'Bangladesh','China' );
 
+![screenshot_2d](https://github.com/EmilySakata/pagila_sql/blob/master/Screenshot_answer/2d.png)
+
 3a. Add a middle_name column to the table actor. Specify the appropriate column type
 
 ALTER TABLE actor ADD COLUMN middle_name VARCHAR(255);
+
+![screenshot_3a](https://github.com/EmilySakata/pagila_sql/blob/master/Screenshot_answer/3a.png)
 
 3b. You realize that some of these actors have tremendously long last names. Change the data type of the middle_name column to something that can hold more than varchar.
 
 ALTER TABLE actor ADD COLUMN middle_name text;
 
-Now we didn’t explicitly cover this in class so exercise your googling skills. 
+![screenshot_3b](https://github.com/EmilySakata/pagila_sql/blob/master/Screenshot_answer/3b.png)
+
 3c. Now write a query that would remove the middle_name column.
 
 ALTER TABLE actor DROP COLUMN middle_name ;
-
+![screenshot_3c](https://github.com/EmilySakata/pagila_sql/blob/master/Screenshot_answer/3c.png)
 
 4a. List the last names of actors, as well as how many actors have that last name.
 
@@ -82,6 +89,7 @@ ALTER TABLE actor DROP COLUMN middle_name ;
 SELECT last_name, COUNT(*) AS count_last_name
 FROM actor
 GROUP BY last_name;
+![screenshot_4a](https://github.com/EmilySakata/pagila_sql/blob/master/Screenshot_answer/4a.png)
 
 4b. List last names of actors and the number of actors who have that last name, but only for names that are shared by at least two actors
 
@@ -89,6 +97,7 @@ SELECT last_name, COUNT(*) AS count_last_name
 FROM actor
 GROUP BY last_name
 HAVING COUNT(last_name) >1;
+![screenshot_4b](https://github.com/EmilySakata/pagila_sql/blob/master/Screenshot_answer/4b.png)
 
 4c. Oh, no! The actor HARPO WILLIAMS was accidentally entered in the actor table as GROUCHO WILLIAMS. Write a query to fix the record.
 
@@ -97,6 +106,7 @@ SET first_name = 'HARPO'
 WHERE
  first_name = 'GROUCHO' AND last_name = 'WILLIAMS';
 
+![screenshot_4c](https://github.com/EmilySakata/pagila_sql/blob/master/Screenshot_answer/4c.png)
 
 4d. Perhaps we were too hasty in changing GROUCHO to HARPO. It turns out that GROUCHO was the correct name after all! 
 In a single query, 
@@ -107,6 +117,7 @@ UPDATE actor
 SET first_name = 'MUCHO GROUCHO'
 WHERE
  actor_id = 172;
+![screenshot_4d](https://github.com/EmilySakata/pagila_sql/blob/master/Screenshot_answer/4d.png)
 
 BE CAREFUL NOT TO CHANGE THE FIRST NAME OF EVERY ACTOR TO MUCHO GROUCHO
 (Hint: update the record using a unique identifier.)
