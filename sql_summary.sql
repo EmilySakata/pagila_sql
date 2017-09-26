@@ -205,3 +205,87 @@ ON r.film_id = f.film_id
 GROUP BY f.title
 ORDER BY COUNT(r.rental_id) DESC;
 
+/* 7g. Write a query to display for each store its store ID, city, and country.*/
+
+WITH 
+	city_country AS (
+    SELECT c.city_id, c.city, co.country, co.country_id
+	FROM city c
+	LEFT JOIN country co
+	ON c.country_id = co.country_id),
+	
+	store_city AS (
+	SELECT s.store_id, s.address_id, a.address, a.city_id
+	FROM store s
+	LEFT JOIN address a
+	ON s.address_id = a.address_id )
+
+SELECT s.store_id, s.address, c.city , c.country
+FROM store_city s 
+INNER JOIN city_country c
+ON s.city_id = c.city_id;
+
+/* 7h. List the top five genres in gross revenue in descending order. */
+
+SELECT inv_amount.category, SUM(inv_amount.amount) AS gross_rev
+FROM(
+SELECT film_rent.film_id, film_rent.category, film_rent.inventory_id, film_rent.rental_id, p.amount
+	FROM(
+		SELECT film_inv.film_id, film_inv.name AS category, film_inv.inventory_id, r.rental_id 
+			FROM (SELECT i.film_id, category.name, i.inventory_id
+				FROM 
+					( SELECT fc.film_id, c.name
+					FROM film_category fc
+					LEFT JOIN category c
+					ON fc.category_id= c.category_id 
+					) AS category
+				LEFT JOIN inventory i
+				ON category.film_id = i.film_id) AS film_inv
+			LEFT JOIN rental r
+			ON r.inventory_id = film_inv.inventory_id
+		) AS film_rent
+	LEFT JOIN payment p
+	ON p.rental_id = film_rent.rental_id) AS inv_amount
+LEFT JOIN film f
+ON f.film_id = inv_amount.film_id
+WHERE f.film_id IS NOT NULL
+GROUP BY inv_amount.category
+ORDER BY SUM(inv_amount.amount) DESC
+LIMIT 5;
+
+/* 8a. In your new role as an executive, you would like to have an easy way of viewing the Top five genres by gross revenue. Use the solution from the problem above to create a view.  */
+
+CREATE OR REPLACE VIEW top_five_gros_rev AS
+
+SELECT inv_amount.category, SUM(inv_amount.amount) AS gross_rev
+FROM(
+SELECT film_rent.film_id, film_rent.category, film_rent.inventory_id, film_rent.rental_id, p.amount
+	FROM(
+		SELECT film_inv.film_id, film_inv.name AS category, film_inv.inventory_id, r.rental_id 
+			FROM (SELECT i.film_id, category.name, i.inventory_id
+				FROM 
+					( SELECT fc.film_id, c.name
+					FROM film_category fc
+					LEFT JOIN category c
+					ON fc.category_id= c.category_id 
+					) AS category
+				LEFT JOIN inventory i
+				ON category.film_id = i.film_id) AS film_inv
+			LEFT JOIN rental r
+			ON r.inventory_id = film_inv.inventory_id
+		) AS film_rent
+	LEFT JOIN payment p
+	ON p.rental_id = film_rent.rental_id) AS inv_amount
+LEFT JOIN film f
+ON f.film_id = inv_amount.film_id
+WHERE f.film_id IS NOT NULL
+GROUP BY inv_amount.category
+ORDER BY SUM(inv_amount.amount) DESC
+LIMIT 5;
+
+/*8b. How would you display the view that you created in 8a?*/
+
+select * from top_five_gros_rev 
+
+/* 8c. You find that you no longer need the view top_five_genres. Write a query to delete it.*/
+DROP VIEW top_five_gros_rev;
