@@ -119,8 +119,7 @@ WHERE
  actor_id = 172;
 ![screenshot_4d](https://github.com/EmilySakata/pagila_sql/blob/master/Screenshot_answer/4d.png)
 
-BE CAREFUL NOT TO CHANGE THE FIRST NAME OF EVERY ACTOR TO MUCHO GROUCHO
-(Hint: update the record using a unique identifier.)
+
 5a. 
 What’s the difference between a left join and a right join. 
 >left join will take all values from left table and join the table that is also in right table together.
@@ -215,7 +214,7 @@ FROM staff s
 LEFT JOIN address a
 ON s.address_id  = a.address_id ;
 
-
+![screenshot_6a](https://github.com/EmilySakata/pagila_sql/blob/master/Screenshot_answer/6a.png)
 
 6b. Use a JOIN to display the total amount rung up by each staff member in January of 2007. Use tables staff and payment.
 
@@ -225,6 +224,7 @@ LEFT JOIN payment p
 ON s.staff_id = p.staff_id
 GROUP BY s.staff_id, s.first_name, s.last_name;
 
+![screenshot_6b](https://github.com/EmilySakata/pagila_sql/blob/master/Screenshot_answer/6b.png)
 
 
 You’ll have to google for this one, we didn’t cover it explicitly in class. 
@@ -238,6 +238,7 @@ ON fa.film_id = f.film_id
 GROUP BY f.film_id
 ORDER BY f.film_id ASC;
 
+![screenshot_6c](https://github.com/EmilySakata/pagila_sql/blob/master/Screenshot_answer/6c.png)
 6d. How many copies of the film Hunchback Impossible exist in the inventory system?
 
 SELECT f.film_id, f.title, COUNT(i.film_id)
@@ -247,6 +248,7 @@ ON f.film_id = i.film_id
 WHERE UPPER(f.title)='HUNCHBACK IMPOSSIBLE'
 GROUP BY f.film_id;
 
+![screenshot_6d](https://github.com/EmilySakata/pagila_sql/blob/master/Screenshot_answer/6d.png)
 
 6e. Using the tables payment and customer and the JOIN command, list the total paid by each customer. List the customers alphabetically by last name:
 
