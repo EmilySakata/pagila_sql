@@ -390,7 +390,77 @@ ON s.city_id = c.city_id;
 
 7h. List the top five genres in gross revenue in descending order. 
 
+SELECT f.film_id, f.title, inv_amount.category, SUM(inv_amount.amount) AS gross_rev
+FROM(
+SELECT film_rent.film_id, film_rent.category, film_rent.inventory_id, film_rent.rental_id, p.amount
+	FROM(
+		SELECT film_inv.film_id, film_inv.name AS category, film_inv.inventory_id, r.rental_id 
+			FROM (SELECT i.film_id, category.name, i.inventory_id
+				FROM 
+					( SELECT fc.film_id, c.name
+					FROM film_category fc
+					LEFT JOIN category c
+					ON fc.category_id= c.category_id 
+					) AS category
+				LEFT JOIN inventory i
+				ON category.film_id = i.film_id) AS film_inv
+			LEFT JOIN rental r
+			ON r.inventory_id = film_inv.inventory_id
+		) AS film_rent
+	LEFT JOIN payment p
+	ON p.rental_id = film_rent.rental_id) AS inv_amount
+LEFT JOIN film f
+ON f.film_id = inv_amount.film_id
+WHERE f.film_id IS NOT NULL
+GROUP BY f.film_id, inv_amount.category
+ORDER BY SUM(inv_amount.amount) DESC
+LIMIT 5;
+
+![screenshot_7h](https://github.com/EmilySakata/pagila_sql/blob/master/Screenshot_answer/7h.png)
+
 8a. In your new role as an executive, you would like to have an easy way of viewing the Top five genres by gross revenue. Use the solution from the problem above to create a view. 
+
+CREATE OR REPLACE VIEW top_five_gros_rev AS
+
+SELECT inv_amount.category, SUM(inv_amount.amount) AS gross_rev
+FROM(
+SELECT film_rent.film_id, film_rent.category, film_rent.inventory_id, film_rent.rental_id, p.amount
+	FROM(
+		SELECT film_inv.film_id, film_inv.name AS category, film_inv.inventory_id, r.rental_id 
+			FROM (SELECT i.film_id, category.name, i.inventory_id
+				FROM 
+					( SELECT fc.film_id, c.name
+					FROM film_category fc
+					LEFT JOIN category c
+					ON fc.category_id= c.category_id 
+					) AS category
+				LEFT JOIN inventory i
+				ON category.film_id = i.film_id) AS film_inv
+			LEFT JOIN rental r
+			ON r.inventory_id = film_inv.inventory_id
+		) AS film_rent
+	LEFT JOIN payment p
+	ON p.rental_id = film_rent.rental_id) AS inv_amount
+LEFT JOIN film f
+ON f.film_id = inv_amount.film_id
+WHERE f.film_id IS NOT NULL
+GROUP BY inv_amount.category
+ORDER BY SUM(inv_amount.amount) DESC
+LIMIT 5;
+
+![screenshot_8a](https://github.com/EmilySakata/pagila_sql/blob/master/Screenshot_answer/8a.png)
+
 8b. How would you display the view that you created in 8a?
+
+select * from top_five_gros_rev 
+
+![screenshot_8b](https://github.com/EmilySakata/pagila_sql/blob/master/Screenshot_answer/8b.png)
+
+
 8c. You find that you no longer need the view top_five_genres. Write a query to delete it.
+
+DROP VIEW top_five_gros_rev;
+
+
+![screenshot_8c](https://github.com/EmilySakata/pagila_sql/blob/master/Screenshot_answer/8c.png)
 
