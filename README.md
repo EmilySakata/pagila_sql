@@ -41,6 +41,7 @@ SELECT actor_id , first_name, last_name
 FROM actor
 WHERE first_name = 'JOE';
 ![screenshot_2a](https://github.com/EmilySakata/pagila_sql/blob/master/Screenshot_answer/2a.png)
+
 2b. Find all actors whose last name contain the letters GEN. Make this case insensitive
 
 SELECT actor_id , first_name, last_name
