@@ -14,6 +14,8 @@ Steps to create pabila database:
 
 
 Homework questions and answers: 
+README file contains all answers and screenshots of the querries used for this homework. Additionally, the SQL summary can be found here:
+
 
 Below section describes the questions and SQL querries used for the answer.
 
@@ -24,13 +26,14 @@ SELECT first_name, last_name
 FROM actor;
 
 
-![screenshot](https://github.com/EmilySakata/pagila_sql/blob/master/Screenshot_answer/1a.png)
+![screenshot_1a](https://github.com/EmilySakata/pagila_sql/blob/master/Screenshot_answer/1a.png)
 
 
 1b. Display the first and last name of each actor in a single column in upper case letters. Name the column Actor Name
 
 SELECT UPPER (CONCAT(first_name, last_name ) )AS actor_name
 FROM actor;
+![screenshot_1b](https://github.com/EmilySakata/pagila_sql/blob/master/Screenshot_answer/1b.png)
 
 2a. You need to find the id, first name, and last name of an actor, of whom you know only the first name of "Joe." What is one query would you use to obtain this information?
 
